@@ -13,9 +13,6 @@
 
 if " admin " is in (do shell script "groups") then
 	set mountName to "EFI"
-	set mountPoint to ""
-	set dev to "/dev/"
-	set partitionInfo to ""
 	set cloverPath to "/EFI/Clover"
 	
 	set bootdisk to do shell script "diskutil info / | awk '/Identifier/ {print $3}'"
