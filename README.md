@@ -1,13 +1,17 @@
 # toggle-boot-efi
-AppleScript to mount/unmount boot disk's EFI partition
-
+AppleScript to mount/unmount boot disk's hidden EFI partition.
+### Requirements 
+Macos 10.10.x and higher and admin priviledges.
 ### Usage 
-
-Open `script.applescript` in Script Editor and do any of the following to run:
+Open `toggle-boot-efi.applescript` in Script Editor and do any of the following to run:
 
 - Run (command-R)
-- Save as compiled script (.scpt) to ~/Library/Scripts/  
+- Save to ~/Library/Scripts/ (my preferred method)  
 Then use the [Systemwide Script Menu][]
 - Save as an Application
+
+or simply run from the terminal
+
+`osascript /[path_to_script]/toggle-boot-efi.applescript`
 
 [Systemwide Script Menu]: https://developer.apple.com/library/content/documentation/LanguagesUtilities/Conceptual/MacAutomationScriptingGuide/UsetheSystem-WideScriptMenu.html
