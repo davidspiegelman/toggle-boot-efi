@@ -3,7 +3,7 @@ AppleScript to mount/unmount boot disk's EFI partition
 
 ### Usage 
 
-Open in Script Editor and do any of the following to run:
+Open `script.applescript` in Script Editor and do any of the following to run:
 
 - Run (command-R)
 - Save as compiled script (.scpt) to ~/Library/Scripts/  
