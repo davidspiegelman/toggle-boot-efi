@@ -28,7 +28,9 @@ on run
 				set scriptResult to do shell script "diskutil unmount " & efiDev
 			else
 				set scriptResult to do shell script "diskutil mount " & efiDev
-				tell application "Finder" to make new Finder window to (get "/Volumes/EFI/EFI/Clover") as POSIX file
+				try
+					tell application "Finder" to make new Finder window to (get "/Volumes/EFI/EFI/Clover") as POSIX file
+				end try
 			end if
 		on error
 			set scriptResult to ""
