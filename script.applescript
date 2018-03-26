@@ -12,33 +12,22 @@
 -- Feel free to improve it but please credit me
 
 if " admin " is in (do shell script "groups") then
-	set mountName to "EFI"
-	set cloverPath to "/EFI/Clover"
+	set bootdisk to do shell script "diskutil info / | grep 'Device Identifier:' | awk '{print $3}'"
 	
-	set bootdisk to do shell script "diskutil info / | awk '/Identifier/ {print $3}'"
-	
-	#check if boot disk is a APFS volume
-	set is_APFS to do shell script "(diskutil list | grep " & bootdisk & " | grep APFS > /dev/null) ; echo $?"
-	set is_APFS to (is_APFS is "0")
-	
-	if is_APFS then
-		set phy_disk to do shell script "diskutil list | grep " & quoted form of ("Container " & get_disknum(bootdisk))
-		set bootdisk to last word of phy_disk
-	end if
-	
-	set efiDev to "/dev/" & get_disknum(bootdisk) & "s1"
-	set mountPoint to "/Volumes/" & mountName & cloverPath
+	# check if boot disk is a APFS volume
+	set is_APFS to (do shell script "(diskutil list | grep " & bootdisk & " | grep APFS > /dev/null) ; echo $?") is "0"
+	if is_APFS then set bootdisk to do shell script "diskutil list | grep " & quoted form of ("Container " & get_disknum(bootdisk)) & " | awk '{print $NF}'"
 	
 	# check if the boot disk's EFI partion is already mounted
-	set is_mounted to do shell script "diskutil info " & efiDev & " | grep Mounted: | awk '{print $2}'"
-	set is_mounted to (is_mounted is "Yes")
+	set efiDev to "/dev/" & get_disknum(bootdisk) & "s1"
+	set mounted to do shell script "diskutil info " & efiDev & " | grep Mounted: | awk '{print $2}'"
 	
 	try
-		if is_mounted then
+		if mounted is "Yes" then
 			do shell script "diskutil unmount " & efiDev
 		else
 			do shell script "diskutil mount " & efiDev
-			tell application "Finder" to make new Finder window to (get mountPoint) as POSIX file
+			tell application "Finder" to make new Finder window to (get "/Volumes/EFI/EFI/Clover") as POSIX file
 		end if
 	on error
 		return
@@ -49,8 +38,8 @@ else
 end if
 
 on get_disknum(identifier)
-	#turns diskXsY into diskX regardless of the number of digits of X and Y
-	#for example disk11s15 (although very unlikely) will return disk11
+	# turns diskXsY into diskX regardless of the number of digits of X and Y
+	# for example disk11s15 (although very unlikely) will return disk11
 	set org_tid to AppleScript's text item delimiters
 	set AppleScript's text item delimiters to {"s"}
 	set identifier to text 5 thru -1 of identifier
